@@ -1,7 +1,6 @@
 package hu.miskolc.uni.iit.googlebookapp.presentation.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import hu.miskolc.uni.iit.googlebookapp.GoogleBookApp

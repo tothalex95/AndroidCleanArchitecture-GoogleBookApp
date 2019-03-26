@@ -1,7 +1,6 @@
 package hu.miskolc.uni.iit.googlebookapp
 
 import android.os.Bundle
-import android.transition.Visibility
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -9,19 +8,16 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import hu.miskolc.uni.iit.googlebookapp.data.repository.BookRepositoryImpl
-import hu.miskolc.uni.iit.googlebookapp.domain.usecase.GetBooks
 import hu.miskolc.uni.iit.googlebookapp.presentation.adapter.SearchResultAdapter
 import hu.miskolc.uni.iit.googlebookapp.presentation.viewmodel.SearchResultViewModel
-import hu.miskolc.uni.iit.googlebookapp.presentation.viewmodel.SearchResultViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private val lifecycleRegistry = LifecycleRegistry(this)
 
-    private val viewModel =
-        SearchResultViewModelFactory(GetBooks(BookRepositoryImpl())).create(SearchResultViewModel::class.java)
+    private val viewModel by inject<SearchResultViewModel>()
     private val adapter = SearchResultAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
