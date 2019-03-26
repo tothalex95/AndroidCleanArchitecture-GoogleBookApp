@@ -1,31 +1,45 @@
 package hu.miskolc.uni.iit.googlebookapp
 
 import android.os.Bundle
-import android.util.Log
+import android.transition.Visibility
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import hu.miskolc.uni.iit.googlebookapp.data.repository.BookRepositoryImpl
 import hu.miskolc.uni.iit.googlebookapp.domain.usecase.GetBooks
+import hu.miskolc.uni.iit.googlebookapp.presentation.adapter.SearchResultAdapter
 import hu.miskolc.uni.iit.googlebookapp.presentation.viewmodel.SearchResultViewModel
 import hu.miskolc.uni.iit.googlebookapp.presentation.viewmodel.SearchResultViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private val lifecycleRegistry = LifecycleRegistry(this)
 
-    private lateinit var viewModel: SearchResultViewModel
+    private val viewModel =
+        SearchResultViewModelFactory(GetBooks(BookRepositoryImpl())).create(SearchResultViewModel::class.java)
+    private val adapter = SearchResultAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = SearchResultViewModelFactory(GetBooks(BookRepositoryImpl())).create(SearchResultViewModel::class.java)
+        search_results_recycler_view.layoutManager = LinearLayoutManager(this)
+        search_results_recycler_view.adapter = adapter
 
-        viewModel.getSearchResult("Metro 2033")
-            .observe(this, Observer { it.items.forEach { b -> Log.i("bookdata", b.toString()) } })
+        search_button.setOnClickListener {
+            progress_bar.visibility = View.VISIBLE
+            viewModel.getSearchResult(search_edit_text.text.toString())
+                .observe(this, Observer {
+                    adapter.searchResult = it
+                    adapter.notifyDataSetChanged()
+                    progress_bar.visibility = View.GONE
+                })
+        }
     }
 
     override fun getLifecycle(): Lifecycle {
