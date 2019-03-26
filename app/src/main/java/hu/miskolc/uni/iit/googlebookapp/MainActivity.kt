@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             progress_bar.visibility = View.VISIBLE
             viewModel.getSearchResult(search_edit_text.text.toString())
                 .observe(this, Observer {
+                    (application as GoogleBookApp).searchResult = it
                     adapter.searchResult = it
                     adapter.notifyDataSetChanged()
                     progress_bar.visibility = View.GONE

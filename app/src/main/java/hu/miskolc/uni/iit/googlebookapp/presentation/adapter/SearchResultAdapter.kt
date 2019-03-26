@@ -1,12 +1,16 @@
 package hu.miskolc.uni.iit.googlebookapp.presentation.adapter
 
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import hu.miskolc.uni.iit.googlebookapp.R
+import hu.miskolc.uni.iit.googlebookapp.domain.model.Book
 import hu.miskolc.uni.iit.googlebookapp.domain.model.SearchResult
+import hu.miskolc.uni.iit.googlebookapp.presentation.activity.BookDetailsActivity
 import kotlinx.android.synthetic.main.row_search_result.view.*
 
 class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>() {
@@ -18,11 +22,7 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchResul
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        val book = searchResult.items[position]
-        holder.itemView.book_title_textview.text = book.volumeInfo.title
-        holder.itemView.book_authors_textview.text = book.volumeInfo.authors?.toString()
-        holder.itemView.book_publisher_textview.text = book.volumeInfo.publisher
-        Picasso.get().load(book.volumeInfo.imageLinks.thumbnail).into(holder.itemView.book_thumbnail_imageview)
+        holder.bind(searchResult.items[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
@@ -32,11 +32,28 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchResul
                 parent,
                 false
             )
-        )
+        ) {
+            val intent = Intent(parent.context, BookDetailsActivity::class.java)
+            intent.putExtra("BOOK_POSITION", it)
+            parent.context.startActivity(intent)
+        }
     }
 
     class SearchResultViewHolder(
-        view: View
-    ) : RecyclerView.ViewHolder(view)
+        view: View,
+        private val listener: (Int) -> Unit
+    ) : RecyclerView.ViewHolder(view) {
+
+        fun bind(book: Book) {
+            itemView.book_title_textview.text = book.volumeInfo.title
+            itemView.book_authors_textview.text = book.volumeInfo.authors?.toString()
+            itemView.book_publisher_textview.text = book.volumeInfo.publisher
+            Picasso.get().load(book.volumeInfo.imageLinks.thumbnail).into(itemView.book_thumbnail_imageview)
+            itemView.setOnClickListener {
+                listener(adapterPosition)
+            }
+        }
+
+    }
 
 }
