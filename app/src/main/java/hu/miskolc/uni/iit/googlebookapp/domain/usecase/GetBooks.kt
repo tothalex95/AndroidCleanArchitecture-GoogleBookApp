@@ -5,8 +5,9 @@ import hu.miskolc.uni.iit.googlebookapp.domain.model.SearchResult
 
 class GetBooks(
     private val bookRepository: BookRepository
-) : ObservableUseCase<SearchResult, String>() {
+) : ObservableUseCase<SearchResult, GetBooks.Params>() {
 
-    override fun execute(params: String) = bookRepository.getBooks(params)
+    data class Params(val query: String, val startIndex:Int)
+    override fun execute(params: Params) = bookRepository.getBooks(params.query, params.startIndex)
 
 }

@@ -1,5 +1,6 @@
 package hu.miskolc.uni.iit.googlebookapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hu.miskolc.uni.iit.googlebookapp.domain.model.SearchResult
@@ -11,7 +12,7 @@ class SearchResultViewModel(
 
     private val searchResultLiveData = MutableLiveData<SearchResult>()
 
-    fun getSearchResult(query: String): LiveData<SearchResult> {
+    fun getSearchResult(query: GetBooks.Params): LiveData<SearchResult> {
         getBooks(
             onSuccess = { searchResultLiveData.value = it},
             onError = {},

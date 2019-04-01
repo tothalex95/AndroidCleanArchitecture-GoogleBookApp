@@ -14,7 +14,7 @@ import org.koin.dsl.module
 
 class GoogleBookApp : Application() {
 
-    var searchResult = SearchResult(0, listOf())
+    var searchResult = SearchResult(0, mutableListOf())
 
     override fun onCreate() {
         super.onCreate()

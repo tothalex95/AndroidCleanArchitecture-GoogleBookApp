@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import hu.miskolc.uni.iit.googlebookapp.domain.usecase.GetBooks
 import hu.miskolc.uni.iit.googlebookapp.presentation.adapter.SearchResultAdapter
 import hu.miskolc.uni.iit.googlebookapp.presentation.viewmodel.SearchResultViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +19,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     private val lifecycleRegistry = LifecycleRegistry(this)
 
     private val viewModel by inject<SearchResultViewModel>()
-    private val adapter = SearchResultAdapter()
+    private val adapter = SearchResultAdapter(viewModel, this)
+    private val startIndex = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         search_button.setOnClickListener {
             progress_bar.visibility = View.VISIBLE
-            viewModel.getSearchResult(search_edit_text.text.toString())
+            viewModel.getSearchResult(GetBooks.Params(search_edit_text.text.toString(),startIndex))
                 .observe(this, Observer {
                     (application as GoogleBookApp).searchResult = it
                     adapter.searchResult = it

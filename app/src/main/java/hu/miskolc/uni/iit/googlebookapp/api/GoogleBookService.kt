@@ -1,6 +1,7 @@
 package hu.miskolc.uni.iit.googlebookapp.api
 
 import hu.miskolc.uni.iit.googlebookapp.domain.model.SearchResult
+import hu.miskolc.uni.iit.googlebookapp.domain.usecase.GetBooks
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -11,9 +12,8 @@ import retrofit2.http.Query
 
 interface GoogleBookService {
 
-    @GET("/books/v1/volumes")
-    fun search(@Query("q") query: String): Observable<SearchResult>
-
+    @GET("/books/v1/volumes?maxResults=40")
+    fun search(@Query("q") query: String, @Query("startIndex") startIndex:Int=0): Observable<SearchResult>
     companion object {
         fun create(): GoogleBookService {
             return Retrofit.Builder()
