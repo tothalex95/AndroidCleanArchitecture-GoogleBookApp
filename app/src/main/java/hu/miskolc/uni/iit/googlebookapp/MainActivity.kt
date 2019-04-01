@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import hu.miskolc.uni.iit.googlebookapp.domain.usecase.GetBooks
 import hu.miskolc.uni.iit.googlebookapp.presentation.adapter.SearchResultAdapter
 import hu.miskolc.uni.iit.googlebookapp.presentation.viewmodel.SearchResultViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,12 +30,24 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         search_button.setOnClickListener {
             progress_bar.visibility = View.VISIBLE
-            viewModel.getSearchResult(search_edit_text.text.toString())
+            search_results_recycler_view.visibility = View.GONE
+            viewModel.getSearchResult(
+                GetBooks.Params(
+                    search_edit_text.text.toString(),
+                    10
+                )
+            )
                 .observe(this, Observer {
-                    (application as GoogleBookApp).searchResult = it
-                    adapter.searchResult = it
+                    (application as GoogleBookApp).searchResult.items.clear()
+                    (application as GoogleBookApp).searchResult.items.addAll(it.items)
+
+                    adapter.searchResult.items.clear()
+                    adapter.searchResult.items.addAll(it.items)
+
                     adapter.notifyDataSetChanged()
+
                     progress_bar.visibility = View.GONE
+                    search_results_recycler_view.visibility = View.VISIBLE
                 })
         }
     }

@@ -6,6 +6,10 @@ class BookRepositoryImpl(
     private val googleBookService : GoogleBookService
 ) : BookRepository {
 
-    override fun getBooks(query: String) = googleBookService.search(query)
+    override fun getBooks(
+        query: String,
+        maxResults: Int,
+        startIndex: Int
+    ) = googleBookService.search(query, maxResults, startIndex)
 
 }

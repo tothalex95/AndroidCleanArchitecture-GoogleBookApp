@@ -12,7 +12,11 @@ import retrofit2.http.Query
 interface GoogleBookService {
 
     @GET("/books/v1/volumes")
-    fun search(@Query("q") query: String): Observable<SearchResult>
+    fun search(
+        @Query("q") query: String,
+        @Query("maxResults") maxResults: Int,
+        @Query("startIndex") startIndex: Int
+    ): Observable<SearchResult>
 
     companion object {
         fun create(): GoogleBookService {

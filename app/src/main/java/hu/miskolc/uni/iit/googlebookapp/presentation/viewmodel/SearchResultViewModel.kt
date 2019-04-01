@@ -11,7 +11,7 @@ class SearchResultViewModel(
 
     private val searchResultLiveData = MutableLiveData<SearchResult>()
 
-    fun getSearchResult(query: String): LiveData<SearchResult> {
+    fun getSearchResult(query: GetBooks.Params): LiveData<SearchResult> {
         getBooks(
             onSuccess = { searchResultLiveData.value = it},
             onError = {},

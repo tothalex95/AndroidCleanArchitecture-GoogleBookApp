@@ -5,6 +5,10 @@ import io.reactivex.Observable
 
 interface BookRepository {
 
-    fun getBooks(query: String): Observable<SearchResult>
+    fun getBooks(
+        query: String,
+        maxResults: Int = 40,
+        startIndex: Int = 0
+    ): Observable<SearchResult>
 
 }

@@ -14,10 +14,10 @@ import kotlinx.android.synthetic.main.row_search_result.view.*
 
 class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>() {
 
-    var searchResult = SearchResult(0, listOf())
+    val searchResult = SearchResult(0, mutableListOf())
 
     override fun getItemCount(): Int {
-        return searchResult.totalItems
+        return searchResult.items.size
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
@@ -47,7 +47,7 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchResul
             itemView.book_title_textview.text = book.volumeInfo.title
             itemView.book_authors_textview.text = book.volumeInfo.authors?.toString()
             itemView.book_publisher_textview.text = book.volumeInfo.publisher
-            Picasso.get().load(book.volumeInfo.imageLinks.thumbnail).into(itemView.book_thumbnail_imageview)
+            Picasso.get().load(book.volumeInfo.imageLinks?.thumbnail).into(itemView.book_thumbnail_imageview)
             itemView.setOnClickListener {
                 listener(adapterPosition)
             }
