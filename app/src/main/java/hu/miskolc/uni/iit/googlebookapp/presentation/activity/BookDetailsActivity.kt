@@ -32,13 +32,14 @@ class BookDetailsActivity : AppCompatActivity() {
     private fun bind() {
         val book = (application as GoogleBookApp).searchResult.items[bookPosition]
 
-        Picasso.get().load(book.volumeInfo.imageLinks.thumbnail).into(book_thumbnail_imageview)
+        Picasso.get().load(book.volumeInfo.imageLinks?.thumbnail).into(book_thumbnail_imageview)
         book_title_textview.text = book.volumeInfo.title
         book_authors_textview.text = book.volumeInfo.authors?.toString()
         book_publisher_textview.text = book.volumeInfo.publisher
         book_description.text = book.volumeInfo.description
 
         show_previous_book_button.isEnabled = bookPosition > 0
+        show_next_book_button.isEnabled = bookPosition < (application as GoogleBookApp).searchResult.items.size - 1
     }
 
 }
